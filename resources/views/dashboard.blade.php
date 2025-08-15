@@ -10,6 +10,18 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="bg-gray-50 text-gray-900">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow p-4 mb-6">
+        <div class="max-w-6xl mx-auto flex justify-between">
+            <div class="font-bold text-lg">Supermarket</div>
+            <div>
+                <a href="#" class="text-blue-500 hover:underline">Dashboard</a>
+                <a href="#" class="ml-4 text-blue-500 hover:underline">Transaksi</a>
+            </div>
+        </div>
+    </nav>
+
     <div class="max-w-6xl mx-auto p-6 space-y-6">
         <h1 class="text-2xl font-bold">Dashboard Supermarket</h1>
 

@@ -10,34 +10,35 @@
 
     <!-- Navbar -->
     <nav class="bg-blue-600 text-white shadow-md">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex justify-between items-center h-16">
-    
-                <!-- Logo -->
-                <div class="flex items-center">
-                    <h1 class="text-lg font-bold">Supermarket Admin</h1>
-                </div>
-    
-                <!-- Menu Navigasi -->
-                <div class="hidden md:flex space-x-6">
-                    <a href="{{ route('dashboard') }}" class="hover:bg-blue-700 px-3 py-2 rounded">Dashboard</a>
-                    <a href="{{ route('produk.index') }}" class="hover:bg-blue-700 px-3 py-2 rounded">Produk</a>
-                    <a href="{{ route('transaksi.index') }}" class="hover:bg-blue-700 px-3 py-2 rounded">Transaksi</a>
-                    <a href="{{ route('laporan.index') }}" class="hover:bg-blue-700 px-3 py-2 rounded">Laporan</a>
-                    <a href="{{ route('pengaturan.index') }}" class="hover:bg-blue-700 px-3 py-2 rounded">Pengaturan</a>
-                </div>
-    
-                <!-- Info User -->
-                <div class="flex items-center space-x-3">
-                    <span class="hidden sm:block">Halo, Admin</span>
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="bg-red-500 hover:bg-red-600 px-3 py-1 rounded">Logout</button>
-                    </form>
-                </div>
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex justify-between items-center h-16">
+
+            <!-- Logo -->
+            <div class="flex items-center">
+                <h1 class="text-lg font-bold">Supermarket Admin</h1>
+            </div>
+
+            <!-- Menu Navigasi -->
+            <div class="hidden md:flex space-x-6">
+                <a href="{{ route('dashboard') }}" class="hover:bg-blue-700 px-3 py-2 rounded">Dashboard</a>
+                <a href="{{ route('produk.index') }}" class="hover:bg-blue-700 px-3 py-2 rounded">Produk</a>
+                <a href="{{ route('transaksi.index') }}" class="hover:bg-blue-700 px-3 py-2 rounded">Transaksi</a>
+                <a href="{{ route('laporan.index') }}" class="hover:bg-blue-700 px-3 py-2 rounded">Laporan</a>
+                <a href="{{ route('pengaturan.index') }}" class="hover:bg-blue-700 px-3 py-2 rounded">Pengaturan</a>
+            </div>
+
+            <!-- Info User -->
+            <div class="flex items-center space-x-3">
+                <span class="hidden sm:block">Halo, Admin</span>
+                <form action="#" method="POST">
+                    @csrf
+                    <button type="submit" class="bg-red-500 hover:bg-red-600 px-3 py-1 rounded">Logout</button>
+                </form>
             </div>
         </div>
-    </nav>
+    </div>
+</nav>
+
     
         <!-- Konten -->
     <div class="p-6">

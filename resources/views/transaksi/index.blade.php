@@ -1,54 +1,53 @@
 @extends('layouts.app')
 
+@section('title', 'Data Transaksi')
+
 @section('content')
-<div class="max-w-6xl mx-auto px-4 mt-6">
-    <div class="bg-white shadow-md rounded-lg overflow-hidden">
-        <div class="bg-blue-600 px-6 py-4 text-white">
-            <h2 class="text-lg font-semibold">📋 Daftar Transaksi</h2>
-        </div>
-
-        <div class="p-6">
-            {{-- Alert success jika ada --}}
-            @if(session('success'))
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            {{-- Tabel Transaksi --}}
-            <div class="overflow-x-auto">
-                <table class="table-auto w-full border border-gray-300 mt-4 bg-white text-sm">
-                    <thead class="bg-gray-200 text-left">
-                        <tr>
-                            <th class="px-4 py-2 border">Nama Produk</th>
-                            <th class="px-4 py-2 border">Jumlah</th>
-                            <th class="px-4 py-2 border">Total Harga</th>
-                            <th class="px-4 py-2 border">Tanggal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($transaksis as $transaksi)
-                            <tr class="hover:bg-gray-100">
-                                <td class="px-4 py-2 border">{{ $transaksi->produk->nama ?? 'Produk Dihapus' }}</td>
-                                <td class="px-4 py-2 border">{{ $transaksi->jumlah }}</td>
-                                <td class="px-4 py-2 border">Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}</td>
-                                <td class="px-4 py-2 border">{{ $transaksi->created_at->format('d-m-Y H:i') }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4" class="text-center px-4 py-2">Belum ada transaksi</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                    <tfoot>
-                        <tr class="bg-gray-100">
-                            <td colspan="2" class="text-end px-4 py-2 border font-bold">Total Keseluruhan</td>
-                            <td colspan="2" class="px-4 py-2 border font-bold">Rp {{ number_format($totalKeseluruhan ?? 0, 0, ',', '.') }}</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
+<div class="bg-white p-6 rounded-xl shadow-md">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">Data Transaksi</h2>
+        <a href="{{ route('transaksi.create') }}" 
+           class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+           + Tambah Transaksi
+        </a>
     </div>
+
+    <table class="w-full border-collapse border border-gray-300">
+        <thead>
+            <tr class="bg-gray-100">
+                <th class="border p-2">#</th>
+                <th class="border p-2">Produk</th>
+                <th class="border p-2">Jumlah</th>
+                <th class="border p-2">Tanggal</th>
+                <th class="border p-2">Total Harga</th>
+                <th class="border p-2">Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($transaksis as $t)
+            <tr>
+                <td class="border p-2">{{ $loop->iteration }}</td>
+                <td class="border p-2">{{ $t->produk->nama_produk }}</td>
+                <td class="border p-2">{{ $t->jumlah }}</td>
+                <td class="border p-2">{{ \Carbon\Carbon::parse($t->tanggal)->format('d/m/Y') }}</td>
+                <td class="border p-2">Rp {{ number_format($t->total_harga, 0, ',', '.') }}</td>
+                <td class="border p-2 text-center">
+                    <a href="{{ route('transaksi.edit', $t->id) }}" 
+                       class="px-2 py-1 bg-yellow-400 text-white rounded">Edit</a>
+                    <form action="{{ route('transaksi.destroy', $t->id) }}" method="POST" class="inline-block"
+                          onsubmit="return confirm('Yakin hapus transaksi ini?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="px-2 py-1 bg-red-500 text-white rounded">Hapus</button>
+                    </form>
+                </td>
+            </tr>
+            @empty
+            <tr>
+                <td colspan="6" class="border p-2 text-center">Belum ada transaksi</td>
+            </tr>
+            @endforelse
+        </tbody>
+    </table>
 </div>
 @endsection

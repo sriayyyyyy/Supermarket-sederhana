@@ -1,93 +1,71 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard Supermarket</title>
-    <!-- Tailwind via CDN (opsional, untuk styling cepat) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body class="bg-gray-50 text-gray-900">
+@extends('layouts.app')
 
-    <!-- Navbar -->
-    <nav class="bg-white shadow p-4 mb-6">
-        <div class="max-w-6xl mx-auto flex justify-between">
-            <div class="font-bold text-lg">Supermarket</div>
-            <div>
-                <a href="#" class="text-blue-500 hover:underline">Dashboard</a>
-                <a href="#" class="ml-4 text-blue-500 hover:underline">Transaksi</a>
-            </div>
+@section('content')
+<div class="p-6 bg-white rounded shadow">
+    <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
+
+    {{-- Ringkasan --}}
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div class="bg-green-100 p-4 rounded shadow">
+            <h2 class="text-lg font-semibold">Saldo Kas</h2>
+            <p class="text-2xl font-bold text-green-700">Rp 10.000.000</p>
         </div>
-    </nav>
-
-    <div class="max-w-6xl mx-auto p-6 space-y-6">
-        <h1 class="text-2xl font-bold">Dashboard Supermarket</h1>
-
-        <!-- Cards Ringkasan -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-white rounded-2xl shadow p-4">
-                <div class="text-sm text-gray-500">Saldo Kas</div>
-                <div class="text-2xl font-semibold">Rp {{ number_format($saldo, 0, ',', '.') }}</div>
-            </div>
-            <div class="bg-white rounded-2xl shadow p-4">
-                <div class="text-sm text-gray-500">Pemasukan Hari Ini</div>
-                <div class="text-2xl font-semibold text-emerald-600">Rp {{ number_format($pemasukanHariIni, 0, ',', '.') }}</div>
-            </div>
-            <div class="bg-white rounded-2xl shadow p-4">
-                <div class="text-sm text-gray-500">Pengeluaran Hari Ini</div>
-                <div class="text-2xl font-semibold text-rose-600">Rp {{ number_format($pengeluaranHariIni, 0, ',', '.') }}</div>
-            </div>
-            <div class="bg-white rounded-2xl shadow p-4">
-                <div class="text-sm text-gray-500">Netto Bulan Ini</div>
-                <div class="text-2xl font-semibold">
-                    Rp {{ number_format(($pemasukanBulanIni - $pengeluaranBulanIni), 0, ',', '.') }}
-                </div>
-                <div class="text-xs text-gray-500">(Pemasukan: Rp {{ number_format($pemasukanBulanIni,0,',','.') }}, Pengeluaran: Rp {{ number_format($pengeluaranBulanIni,0,',','.') }})</div>
-            </div>
+        <div class="bg-blue-100 p-4 rounded shadow">
+            <h2 class="text-lg font-semibold">Pemasukan Hari Ini</h2>
+            <p class="text-2xl font-bold text-blue-700">Rp 500.000</p>
         </div>
-
-        <!-- Grafik -->
-        <div class="bg-white rounded-2xl shadow p-6">
-            <h2 class="text-lg font-semibold mb-4">Grafik 5 Hari Terakhir</h2>
-            <canvas id="cashFlowChart" height="120"></canvas>
+        <div class="bg-blue-200 p-4 rounded shadow">
+            <h2 class="text-lg font-semibold">Pemasukan Bulan Ini</h2>
+            <p class="text-2xl font-bold text-blue-800">Rp 15.000.000</p>
+        </div>
+        <div class="bg-red-100 p-4 rounded shadow">
+            <h2 class="text-lg font-semibold">Pengeluaran Hari Ini</h2>
+            <p class="text-2xl font-bold text-red-700">Rp 200.000</p>
         </div>
     </div>
 
-    <script>
-        const labels = @json($labels);
-        const income = @json($incomeSeries);
-        const expense = @json($expenseSeries);
+    {{-- Grafik --}}
+    <div class="bg-gray-50 p-6 rounded shadow">
+        <h2 class="text-xl font-semibold mb-4">Grafik Pemasukan & Pengeluaran</h2>
+        <canvas id="financeChart" height="100"></canvas>
+    </div>
+</div>
+@endsection
 
-        const ctx = document.getElementById('cashFlowChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels,
-                datasets: [
-                    {
-                        label: 'Pemasukan',
-                        data: income,
-                        tension: 0.3,
-                        borderWidth: 2,
-                    },
-                    {
-                        label: 'Pengeluaran',
-                        data: expense,
-                        tension: 0.3,
-                        borderWidth: 2,
-                    },
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: { beginAtZero: true }
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('financeChart').getContext('2d');
+    const financeChart = new Chart(ctx, {
+        type: 'bar', // kalau mau garis ganti jadi 'line'
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
+            datasets: [
+                {
+                    label: 'Pemasukan',
+                    data: [1200000, 1500000, 1000000, 2000000, 1800000, 2200000],
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Pengeluaran',
+                    data: [500000, 700000, 800000, 1200000, 1000000, 900000],
+                    backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
                 }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+            },
+            scales: {
+                y: { beginAtZero: true }
             }
-        });
-    </script>
-</body>
-</html>
+        }
+    });
+</script>
+@endpush

@@ -1,25 +1,37 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PengaturanController;
+use App\Http\Controllers\PemasukanController;
+use App\Http\Controllers\PengeluaranController;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
 
 // Dashboard
-Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-// Transaksi
-Route::get('/transaksi/create', [TransaksiController::class, 'create'])->name('transaksi.create');
-Route::post('/transaksi/store', [TransaksiController::class, 'store'])->name('transaksi.store');
-Route::get('/transaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
+// Resource Routes (CRUD otomatis)
+Route::resources([
+    'transaksi'   => TransaksiController::class,
+    'produk'      => ProdukController::class,
+    'laporan'     => LaporanController::class,
+    'pemasukan'   => PemasukanController::class,
+    'pengeluaran' => PengeluaranController::class,
+    'pengaturan'  => PengaturanController::class,
+]);
 
-// Produk
-Route::get('/produk', [ProdukController::class, 'index'])->name('produk.index');
-
-// Laporan
-Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
-
-// Pengaturan
-Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan.index');
+// Logout manual
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/dashboard'); // redirect ke dashboard setelah logout
+})->name('logout');

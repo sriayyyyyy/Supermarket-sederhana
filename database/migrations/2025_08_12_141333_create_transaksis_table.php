@@ -16,11 +16,12 @@ public function up()
 {
     Schema::create('transaksis', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('nama_produk')->constrained()->onDelete('cascade');
+        $table->foreignId('produk_id')->constrained('produks')->onDelete('cascade'); // ✅ perbaikan
         $table->integer('jumlah');
         $table->decimal('total_harga', 10, 2);
         $table->timestamps();
     });
+    
 }
 
 

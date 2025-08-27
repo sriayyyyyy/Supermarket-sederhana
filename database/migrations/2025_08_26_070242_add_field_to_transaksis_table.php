@@ -6,27 +6,26 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
+    public function up(): void
     {
         Schema::table('transaksis', function (Blueprint $table) {
-            //
+            // cek apakah kolom ada sebelum di-drop
+            if (Schema::hasColumn('transaksis', 'produk_id')) {
+                $table->dropForeign(['produk_id']); // hapus FK dulu
+                $table->dropColumn('produk_id');    // baru hapus kolom
+            }
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
+    public function down(): void
     {
-        Schema::table('transaksis', function (Blueprint $table) {
-            //
+        Schema::create('transaksis', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('produk_id')->constrained('produks')->onDelete('cascade');
+            $table->integer('jumlah');
+            $table->decimal('total_harga', 10, 2);
+            $table->timestamps();
         });
+        
     }
 };

@@ -2,83 +2,78 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pemasukan;
 use Illuminate\Http\Request;
 
 class PemasukanController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Menampilkan daftar semua pemasukan.
      */
     public function index()
     {
-        //
+        $pemasukan = Pemasukan::latest()->get();
+        return view('pemasukan.index', compact('pemasukan'));
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Menampilkan form tambah pemasukan.
      */
     public function create()
     {
-        //
+        return view('pemasukan.create');
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Menyimpan data pemasukan baru.
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'keterangan' => 'required|string|max:255',
+            'jumlah' => 'required|numeric',
+            'tanggal' => 'required|date',
+        ]);
+
+        Pemasukan::create($request->all());
+
+        return redirect()->route('pemasukan.index')
+                         ->with('success', 'Pemasukan berhasil ditambahkan');
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Menampilkan form edit pemasukan.
      */
-    public function show($id)
+    public function edit(Pemasukan $pemasukan)
     {
-        //
+        return view('pemasukan.edit', compact('pemasukan'));
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Mengupdate data pemasukan.
      */
-    public function edit($id)
+    public function update(Request $request, Pemasukan $pemasukan)
     {
-        //
+        $request->validate([
+            'keterangan' => 'required|string|max:255',
+            'jumlah' => 'required|numeric',
+            'tanggal' => 'required|date',
+        ]);
+
+        $pemasukan->update($request->all());
+
+        return redirect()->route('pemasukan.index')
+                         ->with('success', 'Pemasukan berhasil diperbarui');
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Menghapus pemasukan.
      */
-    public function update(Request $request, $id)
+    public function destroy(Pemasukan $pemasukan)
     {
-        //
-    }
+        $pemasukan->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return redirect()->route('pemasukan.index')
+                         ->with('success', 'Pemasukan berhasil dihapus');
     }
 }

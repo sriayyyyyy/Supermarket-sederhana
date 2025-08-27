@@ -6,19 +6,16 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up(): void
-{
-    Schema::table('transaksis', function (Blueprint $table) {
-        // Hapus foreign key dulu
-        $table->dropForeign(['produk_id']); 
-        
-        // Baru drop kolom
-        $table->dropColumn('produk_id'); 
-
-        // Tambahkan kolom baru
-        $table->unsignedBigInteger('produk_nama')->nullable();
-    });
-}
+    public function up()
+    {
+        Schema::table('transaksis', function (Blueprint $table) {
+            if (Schema::hasColumn('transaksis', 'produk_id')) {
+                $table->dropForeign(['produk_id']);
+                $table->dropColumn('produk_id');
+            }
+        });
+    }
+    
 
     public function down(): void
 {

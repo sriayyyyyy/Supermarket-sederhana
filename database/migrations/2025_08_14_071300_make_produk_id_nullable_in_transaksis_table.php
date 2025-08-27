@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::table('transaksis', function (Blueprint $table) {
             // Hapus kolom produk_id
+            $table->dropForeign(['produk_id']); // hapus FK dulu
             $table->dropColumn('produk_id');
         });
     }

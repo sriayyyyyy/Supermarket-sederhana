@@ -16,12 +16,12 @@ use App\Http\Controllers\PengeluaranController;
 |--------------------------------------------------------------------------
 */
 
-// Login routes
+// Login
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-// Route untuk admin (harus login dulu)
+// Route yang butuh autentikasi
 Route::middleware('auth')->group(function () {
 
     // Dashboard

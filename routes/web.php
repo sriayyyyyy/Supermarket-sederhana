@@ -1,8 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\ProdukController;
@@ -17,21 +16,24 @@ use App\Http\Controllers\PengeluaranController;
 |--------------------------------------------------------------------------
 */
 
-// Dashboard
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+// Login routes
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-// Resource Routes (CRUD otomatis)
-Route::resources([
-    'transaksi'   => TransaksiController::class,
-    'produk'      => ProdukController::class,
-    'laporan'     => LaporanController::class,
-    'pemasukan'   => PemasukanController::class,
-    'pengeluaran' => PengeluaranController::class,
-    'pengaturan'  => PengaturanController::class,
-]);
+// Route untuk admin (harus login dulu)
+Route::middleware('auth')->group(function () {
 
-// Logout manual
-Route::post('/logout', function () {
-    Auth::logout();
-    return redirect('/dashboard'); // redirect ke dashboard setelah logout
-})->name('logout');
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Resource Routes (CRUD otomatis)
+    Route::resources([
+        'transaksi'   => TransaksiController::class,
+        'produk'      => ProdukController::class,
+        'laporan'     => LaporanController::class,
+        'pemasukan'   => PemasukanController::class,
+        'pengeluaran' => PengeluaranController::class,
+        'pengaturan'  => PengaturanController::class,
+    ]);
+});

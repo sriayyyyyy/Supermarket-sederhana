@@ -32,13 +32,16 @@ Route::middleware('auth')->group(function () {
         return view('profil');
     })->name('profil.index');
 
-    // Resource Routes (CRUD otomatis)
+    // Resource Routes
     Route::resources([
         'transaksi'   => TransaksiController::class,
         'produk'      => ProdukController::class,
-        'laporan'     => LaporanController::class,
         'pemasukan'   => PemasukanController::class,
         'pengeluaran' => PengeluaranController::class,
         'pengaturan'  => PengaturanController::class,
     ]);
+
+    // Laporan hanya untuk index (list) dan export
+    Route::resource('laporan', LaporanController::class)->only(['index']);
+    Route::get('/laporan/export', [LaporanController::class, 'export'])->name('laporan.export');
 });

@@ -9,12 +9,17 @@ class Transaksi extends Model
 {
     use HasFactory;
 
-    // Field yang bisa diisi secara mass-assignment
-    protected $fillable = ['produk_id', 'jumlah', 'total_harga'];
+    protected $table = 'transaksi';
 
-    // Relasi ke model Produk
+    protected $fillable = [
+        'produk_id',
+        'jumlah',
+        'total',
+        'tanggal',
+    ];
+
     public function produk()
     {
-        return $this->belongsTo(Produk::class);
+        return $this->belongsTo(Produk::class, 'produk_id');
     }
 }

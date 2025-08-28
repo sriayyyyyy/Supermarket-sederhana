@@ -16,7 +16,7 @@ use App\Http\Controllers\PengeluaranController;
 |--------------------------------------------------------------------------
 */
 
-// Login Routes (Tanpa middleware)
+// Login Routes (tanpa middleware)
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

@@ -2,74 +2,49 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Produk;
 use App\Models\Transaksi;
+use Illuminate\Http\Request;
 
 class TransaksiController extends Controller
 {
-    // 📌 Tampilkan daftar transaksi + filter tanggal + total keseluruhan
-    public function index(Request $request)
+    public function index()
     {
-        $query = Transaksi::with('produk')->latest();
-
-        // Filter berdasarkan tanggal jika ada input dari user
-        if ($request->filled('dari') && $request->filled('sampai')) {
-            $query->whereBetween('tanggal', [$request->dari, $request->sampai]);
-        }
-
-        $transaksis = $query->get();
-        $totalKeseluruhan = $transaksis->sum('total_harga');
-
-        return view('transaksi.index', compact('transaksis', 'totalKeseluruhan'));
+        $transaksi = Transaksi::with('produk')->latest()->paginate(10);
+        return view('transaksi.index', compact('transaksi'));
     }
 
-    // 📌 Form tambah transaksi
     public function create()
     {
-        $produks = Produk::all();
-        return view('transaksi.create', compact('produks'));
+        $produk = Produk::select('id', 'nama_produk', 'harga', 'stok')
+                        ->orderBy('nama_produk')
+                        ->get();
+
+        $transaksi = Transaksi::with('produk')->latest()->take(10)->get();
+
+        return view('transaksi.create', compact('produk', 'transaksi'));
     }
 
-    // 📌 Simpan transaksi + update stok
     public function store(Request $request)
     {
-        $request->validate([
-            'produk_id' => 'required|exists:produks,id',
+        $data = $request->validate([
+            'produk_id' => 'required|exists:produk,id',
             'jumlah'    => 'required|integer|min:1',
             'tanggal'   => 'required|date',
         ]);
 
-        // Ambil produk
-        $produk = Produk::findOrFail($request->produk_id);
+        // ambil produk
+        $produk = Produk::findOrFail($data['produk_id']);
 
-        // Cek stok cukup
-        if ($request->jumlah > $produk->stok) {
-            return redirect()->back()->with('error', 'Stok produk tidak mencukupi!');
-        }
+        // hitung total harga
+        $data['total'] = $produk->harga * $data['jumlah'];
 
-        // Hitung total harga
-        $totalHarga = $produk->harga * $request->jumlah;
+        // simpan transaksi
+        Transaksi::create($data);
 
-        // Simpan transaksi
-        Transaksi::create([
-            'produk_id'   => $produk->id,
-            'jumlah'      => $request->jumlah,
-            'tanggal'     => $request->tanggal,
-            'total_harga' => $totalHarga,
-        ]);
+        // kurangi stok produk
+        $produk->decrement('stok', $data['jumlah']);
 
-        // Update stok produk
-        $produk->stok -= $request->jumlah;
-        $produk->save();
-
-        return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil disimpan.');
-    }
-
-    // 📌 Detail transaksi
-    public function show($id)
-    {
-        $transaksi = Transaksi::with('produk')->findOrFail($id);
-        return view('transaksi.show', compact('transaksi'));
+        return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil disimpan!');
     }
 }

@@ -1,37 +1,53 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Transaksi')
-
 @section('content')
-<div class="bg-white p-6 rounded-xl shadow-md max-w-lg mx-auto">
-    <h2 class="text-xl font-bold mb-6">Tambah Transaksi</h2>
+<div class="container mt-4">
+    <h4 class="mb-3 text-primary">🛒 Tambah Transaksi</h4>
 
-    <form action="{{ route('transaksi.store') }}" method="POST" class="space-y-4">
-        @csrf
+    <div class="card shadow-lg border-0" style="background: #f8f9fa;">
+        <div class="card-body">
+            <form action="{{ route('transaksi.store') }}" method="POST">
+                @csrf
+                <table class="table table-borderless align-middle">
+                    <tr>
+                        <td style="width: 150px; font-weight: bold;">Produk</td>
+                        <td class="ps-3">
+                            <select name="produk_id" id="produk" class="form-select" required>
+                                <option value="">-- Pilih Produk --</option>
+                                @forelse($produk as $item)
+                                    <option value="{{ $item->id }}" data-harga="{{ $item->harga }}">
+                                        {{ $item->nama_produk }} (Stok: {{ $item->stok }})
+                                    </option>
+                                @empty
+                                    <option value="" disabled>Belum ada produk</option>
+                                @endforelse
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;">Jumlah</td>
+                        <td class="ps-3">
+                            <input type="number" name="jumlah" id="jumlah" class="form-control" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;">Tanggal</td>
+                        <td class="ps-3">
+                            <input type="date" name="tanggal" id="tanggal" class="form-control" required>
+                        </td>
+                    </tr>
+                </table>
 
-        {{-- Input Nama Produk --}}
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Nama Produk</label>
-            <input type="text" name="nama_produk" class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-200" placeholder="Ketik nama produk">
+                <div class="text-end mt-3">
+                    <button type="submit" class="btn btn-primary">
+                        💾 Simpan
+                    </button>
+                    <a href="{{ route('transaksi.index') }}" class="btn btn-danger">
+                        ❌ Batal
+                    </a>
+                </div>
+            </form>
         </div>
-
-        {{-- Input Jumlah --}}
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Jumlah</label>
-            <input type="number" name="jumlah" class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-200" value="1" min="1">
-        </div>
-
-        {{-- Input Tanggal --}}
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Transaksi</label>
-            <input type="date" name="tanggal" class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-200" value="{{ date('Y-m-d') }}">
-        </div>
-
-        {{-- Tombol Aksi --}}
-        <div class="flex justify-end space-x-2 pt-4">
-            <a href="{{ route('transaksi.index') }}" class="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400 text-gray-800">Batal</a>
-            <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white">Simpan</button>
-        </div>
-    </form>
+    </div>
 </div>
 @endsection

@@ -9,12 +9,11 @@ class Produk extends Model
 {
     use HasFactory;
 
-    // Sesuaikan nama tabel jika berbeda
-    protected $table = 'produks';
+    protected $table = 'produk'; // pastikan sesuai dengan migration
+    protected $fillable = ['nama_produk', 'harga', 'stok'];
 
-    protected $fillable = [
-        'nama',
-        'stok',
-        'harga',
-    ];
+    public function transaksi()
+    {
+        return $this->hasMany(Transaksi::class, 'produk_id');
+    }
 }

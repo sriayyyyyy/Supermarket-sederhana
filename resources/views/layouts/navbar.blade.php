@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Admin - Supermarket</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <!-- Font Awesome -->
 </head>
 <body class="bg-gray-100">
 
@@ -18,14 +20,33 @@
                     <h1 class="text-lg font-bold">Supermarket Admin</h1>
                 </div>
 
-                <!-- Info User -->
-                <div class="flex items-center space-x-3">
-                    <span class="hidden sm:block">Halo, Admin</span>
-                    <form action="#" method="POST">
-                        @csrf
-                        <button type="submit" class="bg-red-500 hover:bg-red-600 px-3 py-1 rounded">Logout</button>
-                    </form>
+                <!-- Info User dengan Dropdown -->
+                <div class="flex items-center space-x-3" x-data="{ open: false }">
+                    <span class="hidden sm:block flex items-center gap-1">
+                        Halo, Admin
+                        <i class="fas fa-user-circle text-white text-lg"></i>
+                    </span>
+                    
+                    <div class="relative">
+                        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" 
+                             @click="open = !open"
+                             class="w-8 h-8 rounded-full cursor-pointer border-2 border-white" 
+                             alt="User Icon">
+                        
+                        <!-- Dropdown -->
+                        <div x-show="open" 
+                             @click.away="open = false"
+                             x-transition 
+                             class="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-50 text-black text-sm">
+                            <a href="{{ route('profile') }}" class="block px-4 py-2 hover:bg-gray-100">Lihat Profil</a>
+                            <form action="#" method="POST" class="border-t border-gray-200">
+                                @csrf
+                                <button type="submit" class="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600">Logout</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
+                
             </div>
         </div>
     </nav>

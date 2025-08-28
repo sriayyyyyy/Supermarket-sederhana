@@ -16,13 +16,19 @@
 
                 <!-- Logo + Nama -->
                 <div class="flex items-center space-x-3">
-                <img src="{{ asset('logo.jpg') }}" alt="Logo Supermarket" class="h-12 w-12 rounded-full object-cover">
+                    <img src="{{ asset('logo.jpg') }}" alt="Logo Supermarket" class="h-12 w-12 rounded-full object-cover">
                     <h1 class="text-lg font-bold">Supermarket Sederhana</h1>
                 </div>
 
                 <!-- Info User -->
-                <div class="flex items-center space-x-3">
-                    <span class="hidden sm:block">Halo, Admin</span>
+                <div class="relative group inline-flex items-center cursor-pointer select-none">
+                    <span class="mr-2 font-semibold">Halo, Admin</span>
+                    <img src="{{ asset('ikon.jpg') }}" alt="Dropdown Icon" class="w-8 h-8 rounded-full" />
+
+                    <!-- Dropdown Menu -->
+                    <div class="absolute right-0 mt-14 w-40 bg-white text-black rounded-md shadow-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-opacity duration-300 z-50">
+                        <a href="{{ route('profil.index') }}" class="block px-4 py-2 hover:bg-gray-200">Lihat Profil</a>
+                    </div>
                 </div>
 
             </div>
@@ -36,7 +42,7 @@
             <div class="p-2 text-xl font-bold text-blue-400">
                 🛒 Supermarket
             </div>
-            
+
             {{-- Menu utama --}}
             <ul class="space-y-2 flex-1 mt-4">
                 <li>
@@ -100,14 +106,12 @@
             {{-- Logout di paling bawah --}}
             <form action="{{ route('logout') }}" method="POST" class="mt-4">
                 @csrf
-                <button type="submit"
-                        class="w-full text-left flex items-center px-4 py-2 rounded bg-red-600 hover:bg-red-700 font-bold">
-                    🚪 Logout
+                <button type="submit" >🚪 Logout
                 </button>
             </form>
         </aside>
 
-        <!-- Konten -->
+        <!-- Konten utama -->
         <main class="flex-1 p-6">
             @yield('content')
         </main>
@@ -116,3 +120,5 @@
     @stack('scripts')
 </body>
 </html>
+
+                       

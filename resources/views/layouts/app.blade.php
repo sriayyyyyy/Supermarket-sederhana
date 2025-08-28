@@ -16,7 +16,7 @@
 
                 <!-- Logo + Nama -->
                 <div class="flex items-center space-x-3">
-                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-8 w-8">
+                <img src="{{ asset('logo.jpg') }}" alt="Logo Supermarket" class="h-12 w-12 rounded-full object-cover">
                     <h1 class="text-lg font-bold">Supermarket Sederhana</h1>
                 </div>
 
@@ -32,6 +32,7 @@
     <div class="flex">
         <!-- Sidebar -->
         <aside class="w-64 bg-gray-900 text-white shadow-md min-h-screen p-4 flex flex-col">
+
             <div class="p-2 text-xl font-bold text-blue-400">
                 🛒 Supermarket
             </div>

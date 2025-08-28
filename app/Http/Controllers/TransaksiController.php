@@ -8,10 +8,17 @@ use App\Models\Transaksi;
 
 class TransaksiController extends Controller
 {
-    // 📌 Tampilkan daftar transaksi + total keseluruhan
-    public function index()
+    // 📌 Tampilkan daftar transaksi + filter tanggal + total keseluruhan
+    public function index(Request $request)
     {
-        $transaksis = Transaksi::with('produk')->latest()->get();
+        $query = Transaksi::with('produk')->latest();
+
+        // Filter berdasarkan tanggal jika ada input dari user
+        if ($request->filled('dari') && $request->filled('sampai')) {
+            $query->whereBetween('tanggal', [$request->dari, $request->sampai]);
+        }
+
+        $transaksis = $query->get();
         $totalKeseluruhan = $transaksis->sum('total_harga');
 
         return view('transaksi.index', compact('transaksis', 'totalKeseluruhan'));

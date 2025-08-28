@@ -31,11 +31,12 @@ class PemasukanController extends Controller
     {
         $request->validate([
             'keterangan' => 'required|string|max:255',
-            'jumlah' => 'required|numeric',
-            'tanggal' => 'required|date',
+            'jumlah'     => 'required|numeric',
+            'tanggal'    => 'required|date',
         ]);
 
-        Pemasukan::create($request->all());
+        // Simpan hanya field yang diizinkan
+        Pemasukan::create($request->only(['keterangan', 'jumlah', 'tanggal']));
 
         return redirect()->route('pemasukan.index')
                          ->with('success', 'Pemasukan berhasil ditambahkan');
@@ -56,11 +57,11 @@ class PemasukanController extends Controller
     {
         $request->validate([
             'keterangan' => 'required|string|max:255',
-            'jumlah' => 'required|numeric',
-            'tanggal' => 'required|date',
+            'jumlah'     => 'required|numeric',
+            'tanggal'    => 'required|date',
         ]);
 
-        $pemasukan->update($request->all());
+        $pemasukan->update($request->only(['keterangan', 'jumlah', 'tanggal']));
 
         return redirect()->route('pemasukan.index')
                          ->with('success', 'Pemasukan berhasil diperbarui');

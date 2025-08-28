@@ -1,51 +1,119 @@
 @extends('layouts.app')
 
-@section('title', 'Daftar Produk')
-
 @section('content')
-<div class="bg-white p-6 rounded-xl shadow-md">
-    <h2 class="text-xl font-bold mb-6">📦 Daftar Produk</h2>
+<div class="container">
+    <h2 style="margin-bottom: 15px;">📦 Daftar Produk</h2>
 
     @if(session('success'))
-        <div class="mb-4 p-3 bg-green-100 text-green-700 rounded-lg">
+        <div style="color: green; margin-bottom: 10px; font-weight:bold;">
             {{ session('success') }}
         </div>
     @endif
 
-    <div class="overflow-x-auto">
-        <table class="w-full border-collapse border border-gray-300 rounded-lg shadow-sm">
-            <thead class="bg-blue-600 text-white">
-                <tr>
-                    <th class="px-4 py-2 text-left">#</th>
-                    <th class="px-4 py-2 text-left">Nama Produk</th>
-                    <th class="px-4 py-2 text-center">Stok</th>
-                    <th class="px-4 py-2 text-center">Harga</th>
-                    <th class="px-4 py-2 text-center">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($produks as $index => $produk)
-                    <tr class="border-b hover:bg-gray-50">
-                        <td class="px-4 py-2">{{ $index + 1 }}</td>
-                        <td class="px-4 py-2 font-medium">{{ $produk->nama }}</td>
-                        <td class="px-4 py-2 text-center">{{ $produk->stok }}</td>
-                        <td class="px-4 py-2 text-center">Rp {{ number_format($produk->harga, 0, ',', '.') }}</td>
-                        <td class="px-4 py-2 text-center">
-                            <a href="{{ route('produk.edit', $produk->id) }}" class="px-3 py-1 rounded bg-yellow-400 hover:bg-yellow-500 text-white text-sm">Edit</a>
-                            <form action="{{ route('produk.destroy', $produk->id) }}" method="POST" class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="px-3 py-1 rounded bg-red-500 hover:bg-red-600 text-white text-sm" onclick="return confirm('Yakin hapus produk ini?')">Hapus</button>
-                            </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" class="px-4 py-2 text-center text-gray-500">Belum ada produk</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+    <a href="{{ route('produk.create') }}" 
+       style="display:inline-block; margin-bottom:15px; padding:8px 15px; background:#28a745; color:white; text-decoration:none; border-radius:6px;">
+        + Tambah Produk
+    </a>
+
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Nama Produk</th>
+                <th>Harga</th>
+                <th>Stok</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+        @forelse($produk as $i => $item)
+            <tr>
+                <td>{{ $i+1 }}</td>
+                <td>{{ $item->nama }}</td>
+                <td>Rp {{ number_format($item->harga, 0, ',', '.') }}</td>
+                <td>{{ $item->stok }}</td>
+                <td>
+                    <a href="{{ route('produk.edit', $item->id) }}" class="btn-edit">Edit</a>
+                    <form action="{{ route('produk.destroy', $item->id) }}" 
+                          method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" 
+                                onclick="return confirm('Yakin mau hapus?')" 
+                                class="btn-delete">
+                            Hapus
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        @empty
+            <tr>
+                <td colspan="5">Belum ada data produk</td>
+            </tr>
+        @endforelse
+        </tbody>
+    </table>
 </div>
+
+{{-- CSS --}}
+<style>
+    .styled-table {
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 16px;
+        width: 100%;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .styled-table thead tr {
+        background-color: #333333;
+        color: #ffffff;
+        text-align: center;
+    }
+
+    .styled-table th, .styled-table td {
+        border: 1px solid #dddddd;
+        padding: 12px 15px;
+        text-align: center;
+    }
+
+    .styled-table tbody tr {
+        border-bottom: 1px solid #dddddd;
+    }
+
+    .styled-table tbody tr:nth-of-type(even) {
+        background-color: #f3f3f3;
+    }
+
+    .styled-table tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .btn-edit {
+        display: inline-block;
+        padding: 6px 12px;
+        background: #007bff;
+        color: white;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    .btn-edit:hover {
+        background: #0056b3;
+    }
+
+    .btn-delete {
+        display: inline-block;
+        padding: 6px 12px;
+        background: #dc3545;
+        color: white;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    .btn-delete:hover {
+        background: #a71d2a;
+    }
+</style>
 @endsection

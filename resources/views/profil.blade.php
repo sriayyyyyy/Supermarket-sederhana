@@ -16,7 +16,7 @@
 
     <!-- 3. Info Utama -->
     <div class="mb-6 space-y-2 text-gray-700">
-        <p>📍 <strong>Alamat:</strong> Jl. Contoh No. 123, Jakarta</p>
+        <p>📍 <strong>Alamat:</strong> Jl. TalagaKulon No. 123, Jakarta</p>
         <p>🕒 <strong>Jam Operasional:</strong> Senin - Sabtu: 08.00–20.00, Minggu: 09.00–17.00</p>
         <p>☎️ <strong>Kontak:</strong> (021) 1234 5678</p>
     </div>
@@ -34,8 +34,8 @@
     <!-- 5. Promo Aktif -->
     <div class="mb-6">
         <h2 class="text-lg font-semibold text-gray-800 mb-2">Promo Aktif</h2>
-        <img src="{{ asset('promo.jpg') }}" alt="Banner Promo" class="rounded shadow-md">
-        {{-- Ganti 'promo.jpg' dengan nama file promo di folder public --}}
+        <img src="{{ asset('banner.jpg') }}" alt="Banner Promo" class="rounded shadow-md">
+        {{-- Ganti 'banner.jpg' dengan nama file promo di folder public --}}
     </div>
 
     <!-- 6. Tautan Sosial Media -->
